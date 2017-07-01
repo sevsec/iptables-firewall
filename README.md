@@ -1,6 +1,8 @@
 # iptables-firewall
 Simple whitelist-based firewall that uses iptables for rule enforcement.
 
+
+
 # Story, background
 I wrote some autoation for all the Virtual Private Servers I owned a few years back. Services like Digital Ocean, Cloud at Cost, SSD Virt, Lightsail, etc do not typically include any sort of mechanism to protect your VPS, leaving them open to the world unless you take the time to configure something on your own. This means that your VPS is open to the world, being hammered on within 1 second of going live on the public internet. Aside from the security risk, it's annoying to have people knocking on your door constantly, so I decided to setup an iptables-based firewall on my boxes. I went with iptables as it is typically installed by default on most distros, so creating automation around iptables to prevent my VPS from being hammered was fairly trivial.
 
@@ -9,13 +11,13 @@ Since I've had this for years, and wanted to start contributing something to the
 This firewall is whitelist-based, as it was much easier for me to specify which IPs were allowed on my VPS rather than use software like fail2ban or try to block the entire internet. (I am debating adding a blacklist feature - we'll see.)
 
 
-#Features:
+# Features:
 - IP-based whitelist - IPs in whitelist will have full access to all ports on box
 - Port-based whitelist - TCP/UDP ports may be opened to the world
 - Hostname-resolving capability - Will automatically resolve IPs behind hostnames and add those to the IP whitelist
 
 
-#Installation:
+# Installation:
 1. Run 'git clone https://github.com/sre3219/iptables-firewall'
 2. Enter the repo using 'cd iptables-firewall'
 3. Run the included setup.sh script using sudo: "sudo ./setup.sh"
@@ -28,7 +30,7 @@ This firewall is whitelist-based, as it was much easier for me to specify which 
 Note: If you chose the advanced installation mode, the requisite dependencies will be installed and all necessary directories/files will be created. No changes will be made to iptables, however, and you will need to run iptables-firewall.sh on your own. Additionally, you should consider copying the included cron file in config/cron-file to /etc/cron.d/.
 
 
-#TODO:
+# TODO:
 - IPv6 support (duh)
 - getopts for setup script, to allow further automation of the installation, setup, and configuration of this package
 - getopts for the iptables-firewall script, to allow greater flexibility in which configs are used
