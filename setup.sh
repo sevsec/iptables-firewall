@@ -128,7 +128,9 @@ simple_install() {
   # Setup IPs - TODO: check for valid IPs
   echo "Please enter all IPs allowed to connect to this system, separated by comma, tab, or space (NOT EOL): "
   read RIP
-  grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}" <<< $RIP > /etc/iptables-firewall/config/whitelist.ips > /dev/null 2>&1
+  for IP in `grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}" <<< $RIP`; do
+    echo $IP >> /etc/iptables-firewall/config/whitelist.ips
+  done
 
   # Hostnames
   echo "Please enter any hostnames you wish to resolve and allow, separate by comma, tab, or space (NOT EOL): "
