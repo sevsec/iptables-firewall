@@ -174,7 +174,7 @@ simple_install() {
   echo "cron job has been placed in /etc/cron.d (iptables_firewall)"
 
   echo "Running iptables-firewall.sh ..."
-  eval `/etc/iptables-firewall/bin/iptables-firewall.sh`
+  /bin/bash /etc/iptables-firewall/bin/iptables-firewall.sh
   echo ""
   echo "Installation is complete! Try running 'sudo iptables -nvL' to verify your configuration."
   echo ""
