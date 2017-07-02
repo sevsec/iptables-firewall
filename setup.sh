@@ -15,6 +15,22 @@ fi
 
 DEPENDENCIES="iptables iptables-persistent iptables-save host"
 
+write_msg() {
+  MODE="$1"
+  MSG="$2"
+
+  case $MODE in
+    0) echo "[INFO] $MSG"
+      ;;
+    1) echo "[WARN] $MSG"
+      ;;
+    2) echo "[ERROR] $MSG"
+      ;;
+    *) echo "[??] $MSG"
+      ;;
+  esac
+}
+
 install_depends() {
   if [[ $(which yum > /dev/null 2>&1; echo $?) -eq 0 ]]; then
     echo "Red Hat-based distro detected, updating and installing using yum ..."
@@ -101,7 +117,7 @@ simple_install() {
   check_depends "0"
   install_depends
 
-  echo "Setup appears to be succesful."
+  echo "iptables-firewall and dependency installations appear to be succesful."
   read -p"Proceed with adding IPs and hostnames to config? [Y/n]: " PROMPT
 
   if [[ "$PROMPT" =~ [nN] ]]; then
@@ -133,9 +149,10 @@ simple_install() {
   done
 
   # Enable ICMP?
-  read -p"Enable ICMP (disabled by default)? [y/N]: " ICMP
+  read -p"Allow ICMP from internet? [y/N]: " ICMP
   if [[ "$ICMP" =~ [yY] ]]; then
     sed -i 's/allow\_icmp\=0/allow\_icmp\=1/g' /etc/iptables-firewall/config/icmp.conf
+    echo "ICMP has been set to ALLOW; ICMP is enabled."
   fi
 
   # Setup cron job
@@ -153,34 +170,47 @@ simple_install() {
     return
   fi
 
-  cp -f ../config/cron-file/run_firewall_script.cron /etc/cron.d/
+  cp -f ./config/cron-file/iptables_firewall.cron /etc/cron.d/iptables_firewall
+  echo "cron job has been placed in /etc/cron.d (iptables_firewall)"
 }
 
 advanced_install() {
   # Requires that the user update all configs themselves, including cron job
-  echo "Advanced install" #
+  echo "Performing advanced installation."
   check_depends "1"
   install_depends
+
+  echo "Advanced setup is complete."
+  echo ""
+  echo "Some useful information:"
+  echo ""
+  echo "Main folder: /etc/iptables-firewall"
+  echo "Script folder: /etc/iptables-firewall/bin"
+  echo "Config folder: /etc/iptables-firewall/config"
+  echo ""
+  echo "You should look under /etc/iptables-firewall/config to get started."
+  echo "(Note: a cron script is located under /etc/iptables-firewall/config/cron-file)"
+  echo ""
 }
 
-echo "Welcome message" #
-echo ""
 while true; do
   echo "This script will setup iptables-firewall for you."
+  echo ""
   echo "You have the option of running: "
-  echo "  [S]imple setup and installation (recommended)"
-  echo "  [A]dvanced setup and installation (necessities will be installed, you will have to configure manually)"
+  echo "  [S]imple setup and installation, you will be prompted for all configs (recommended)"
+  echo "  [A]dvanced setup and installation (base system will be installed, you will have to config/enable manually)"
   echo "  [Q]uit this setup and leave the system unmodified"
   echo ""
-  read -p"Please choose: [S/a/q]: " PROMPT
+  read -p"Please choose: [s/a/Q]: " PROMPT
     if [[ "$PROMPT" =~ [Aa] ]]; then
       advanced_install
       break
-    elif [[ "$PROMPT" =~ [Qq] ]]; then
-      echo "Exiting ..."
-      exit 0
-    else
+    elif [[ "$PROMPT" =~ [Ss] ]]; then
       simple_install
       break
+    else
+      echo "No changes have been made, exiting."
+      echo ""
+      exit 0
     fi
 done
