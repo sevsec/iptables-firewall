@@ -172,6 +172,13 @@ simple_install() {
 
   cp -f ./config/cron-file/iptables_firewall.cron /etc/cron.d/iptables_firewall
   echo "cron job has been placed in /etc/cron.d (iptables_firewall)"
+
+  echo "Running iptables-firewall.sh ..."
+  eval `/etc/iptables-firewall/bin/iptables-firewall.sh`
+  echo ""
+  echo "Installation is complete! Try running 'sudo iptables -nvL' to verify your configuration."
+  echo ""
+  echo "Done."
 }
 
 advanced_install() {
@@ -189,6 +196,7 @@ advanced_install() {
   echo "Config folder: /etc/iptables-firewall/config"
   echo ""
   echo "You should look under /etc/iptables-firewall/config to get started."
+  echo "To apply your config changes, run /etc/iptables-firewall/bin/iptables-firewall.sh."
   echo "(Note: a cron script is located under /etc/iptables-firewall/config/cron-file)"
   echo ""
 }
