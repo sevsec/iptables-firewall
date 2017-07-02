@@ -13,7 +13,7 @@ elif [[ $(whoami) != "root" ]]; then
   exit 1
 fi
 
-DEPENDS="iptables iptables-persistent iptables-save host"
+DEPENDS="iptables iptables-persistent host"
 
 write_msg() {
   MODE="$1"

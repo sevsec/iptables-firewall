@@ -3,8 +3,8 @@
 # https://github.com/sre3219/iptables-firewall
 pushd /etc/iptables-firewall/
 
-if [[ $(which iptables > /dev/null; echo $?) -ne 0 ]] || [[ $(which iptables-save > /dev/null; echo $?) -ne 0 ]] || [[ $(which iptables-persistent > /dev/null; echo $?) -ne 0 ]]; then
-  echo "iptables, iptables-save, and iptables-persistent required. Try re-installing."
+if [[ $(which iptables > /dev/null; echo $?) -ne 0 ]] || [[ $(which iptables-save > /dev/null; echo $?) -ne 0 ]]; then
+  echo "iptables and iptables-save required. Try re-installing."
   echo "Exiting ..."
   exit 1
 else
@@ -12,11 +12,11 @@ else
   IPTABLES_SAVE=$(which iptables-save)
 fi
 
-WHITELIST=$(grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}" ../config/whitelist.ips)
-HOSTLIST_IPS=$(grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}"  ../config/hostname.ips)
-TCP_ALLOWED=$(grep -oE "[0-9]{1,5}" ../config/tcp-ports.conf)
-UDP_ALLOWED=$(grep -oE "[0-9]{1,5}" ../config/udp-ports.conf)
-ICMP_ALLOWED=$(grep -oE "allow\_icmp\=[0-1]" ../config/icmp.conf | grep -oE "[0-1]")
+WHITELIST=$(grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}" ./config/whitelist.ips)
+HOSTLIST_IPS=$(grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}"  ./config/hostname.ips)
+TCP_ALLOWED=$(grep -oE "[0-9]{1,5}" ./config/tcp-ports.conf)
+UDP_ALLOWED=$(grep -oE "[0-9]{1,5}" ./config/udp-ports.conf)
+ICMP_ALLOWED=$(grep -oE "allow\_icmp\=[0-1]" ./config/icmp.conf | grep -oE "[0-1]")
 
 $IPTABLES_SAVE > /etc/iptables-firewall/iptables-old.conf
 
@@ -69,5 +69,5 @@ if [[ "$ICMP_ALLOWED" -eq 0 ]]; then
 fi
 
 # Save the rules so they are persistent on reboot.
-/etc/init.d/iptables-persistent save
-$IPTABLES_SAVE > /etc/iptables-firewall/config/iptables-rules.conf
+$IPTABLES_SAVE > /etc/iptables/rules.v4 > /dev/null 2>&1
+popd
