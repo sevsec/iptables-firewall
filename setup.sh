@@ -16,20 +16,20 @@ fi
 DEPENDENCIES="iptables iptables-persistent iptables-save host"
 
 install_depends() {
-  if [[ $(which yum > /dev/null; echo $?) -eq 0 ]]; then
+  if [[ $(which yum > /dev/null 2>&1; echo $?) -eq 0 ]]; then
     echo "Red Hat-based distro detected, updating and installing using yum ..."
-    yum update 2>&1 /dev/null
-    yum install -y $DEPENDS 2>&1 /dev/null
+    yum update > /dev/null 2>&1
+    yum install -y $DEPENDS > /dev/null 2>&1
     if [[ "$?" -eq 0 ]]; then
       echo "Dependency installations successful."
     else
       echo "Issue installing dependencies, exiting."
       exit 1
     fi
-  elif [[ $(which apt-get > /dev/null; echo $?) -eq 0 ]]; then
+  elif [[ $(which apt > /dev/null 2>&1; echo $?) -eq 0 ]]; then
     echo "Debian-based distro detected, updating and installing using apt ..."
-    apt update 2>&1 /dev/null
-    apt install -y $DEPENDS 2>&1 /dev/null
+    apt update > /dev/null 2>&1
+    apt install -y $DEPENDS > /dev/null 2>&1
     if [[ "$?" -eq 0 ]]; then
       echo "Dependency installations successful."
     else
@@ -38,8 +38,8 @@ install_depends() {
     fi
   elif [[ $(which pacman > /dev/null; echo $?) -eq 0 ]]; then
     echo "Arch-based distro detected, updating and installing using pacman ..."
-    pacman -Su 2>&1 /dev/null
-    pacman install -y $DEPENDS 2>&1 /dev/null
+    pacman -Su > /dev/null 2>&1
+    pacman install -y $DEPENDS > /dev/null 2>&1
     if [[ "$?" -eq 0 ]]; then
       echo "Dependency installations successful."
     else
@@ -58,8 +58,8 @@ install_depends() {
 check_depends() {
   if [[ ! -d /etc/iptables-firewall ]]; then
     echo "Installing to /etc/iptables-firewall ..."
-    mkdir /etc/iptables-firewall 2>&1 /dev/null
-    cp -rfu . /etc/iptables-firewall/ 2>&1 /dev/null
+    mkdir /etc/iptables-firewall > /dev/null 2>&1
+    cp -rfu . /etc/iptables-firewall/ > /dev/null 2>&1
   elif [[ "$1" -eq 1 ]]; then
     echo "/etc/iptables-firewall appears to exist."
     echo "You may:"
@@ -70,13 +70,13 @@ check_depends() {
 
     case "$PROMPT" in
       "R" | "r") # Reinstall - keeps old configs
-        cp -ru ./bin /etc/iptables-firewall/ 2>&1 /dev/null
-        cp -ru * /etc/iptables-firewall/ 2>&1 /dev/null
+        cp -ru ./bin /etc/iptables-firewall/ > /dev/null 2>&1
+        cp -ru * /etc/iptables-firewall/ > /dev/null 2>&1
         ;;
       "D" | "d") # Delete - removes all old files, cean install
-        rm -rf /etc/iptables-firewall/ 2>&1 /dev/null
-        mkdir /etc/iptables-firewall 2>&1 /dev/null
-        cp -rfu . /etc/iptables-firewall/ 2>&1 /dev/null
+        rm -rf /etc/iptables-firewall/ > /dev/null 2>&1
+        mkdir /etc/iptables-firewall > /dev/null 2>&1
+        cp -rfu . /etc/iptables-firewall/ > /dev/null 2>&1
         ;;
       "C" | "c") # Exit
         echo "Exiting."
@@ -89,9 +89,9 @@ check_depends() {
     esac
   else
     echo "Backing up what appears to be an old version of iptables-firewall ..."
-    mv /etc/iptables-firewall /etc/iptables-firewall.OLD 2>&1 /dev/null
-    mkdir /etc/iptables-firewall 2>&1 /dev/null
-    cp -rfu . /etc/iptables-firewall/ 2>&1 /dev/null
+    mv /etc/iptables-firewall /etc/iptables-firewall.OLD > /dev/null 2>&1
+    mkdir /etc/iptables-firewall > /dev/null 2>&1
+    cp -rfu . /etc/iptables-firewall/ > /dev/null 2>&1
   fi
 }
 
@@ -112,7 +112,7 @@ simple_install() {
   # Setup IPs - TODO: check for valid IPs
   echo "Time to setup the ALLOWED IP list. Please enter all allowed IPs, separated by any char (space, comma, etc - NO EOL): "
   read RIP
-  grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}" <<< $RIP > /etc/iptables-firewall/config/whitelist.ips 2>&1 /dev/null
+  grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}" <<< $RIP > /etc/iptables-firewall/config/whitelist.ips > /dev/null 2>&1
 
   # Setup TCP ports
   echo "Please enter all allowed TCP ports (22, 80, 443, etc). Keep in mind that these ports will be open to the world: "
