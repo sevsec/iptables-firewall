@@ -1,3 +1,3 @@
 # Automatically resolve hostnames, then refresh iptables rules
-*/15 * * * * root /bin/bash /etc/iptables-firewall/bin/get-hosts.sh
-*/30 * * * * root /bin/bash /etc/iptables-firewall/bin/iptables-firewall.sh
+*/5 * * * * root /bin/bash /etc/iptables-firewall/bin/get-hosts.sh
+*/8 * * * * root /bin/bash /etc/iptables-firewall/bin/iptables-firewall.sh

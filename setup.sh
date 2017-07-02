@@ -126,9 +126,16 @@ simple_install() {
   fi
 
   # Setup IPs - TODO: check for valid IPs
-  echo "Time to setup the ALLOWED IP list. Please enter all allowed IPs, separated by any char (space, comma, etc - NO EOL): "
+  echo "Please enter all IPs allowed to connect to this system, separated by comma, tab, or space (NOT EOL): "
   read RIP
   grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}" <<< $RIP > /etc/iptables-firewall/config/whitelist.ips > /dev/null 2>&1
+
+  # Hostnames
+  echo "Please enter any hostnames you wish to resolve and allow, separate by comma, tab, or space (NOT EOL): "
+  read RHOST
+  for HOST in `grep -oP "\w*\.*\w*\.\w*\.*\w*\.*\w*\.*" <<< $RHOST`; do
+    echo $HOST >> /etc/iptables-firewall/config/hostname.list
+  done 
 
   # Setup TCP ports
   echo "Please enter all allowed TCP ports (22, 80, 443, etc). Keep in mind that these ports will be open to the world: "
@@ -156,11 +163,12 @@ simple_install() {
   fi
 
   # Setup cron job
-  echo "You have the option of automating iptables-firewall. A script will resolve hostname(s) to IP(s)"
+  echo ""
+  echo "You have the option of automating the hostname-to-IP lookups. A script will resolve hostname(s) to IP(s)"
   echo "every so often, as well as update the iptables rules to reflect the latest changes."
-  echo "This means that any IP changes to hostnames, as well as whitelist updates, will automatically"
-  echo "be applied to your firewall rules."
-  echo "(Note: hostnames will be resolved every 15 mins and firewall updates will be made every 30 mins.)"
+  echo "This means that, if you use DDNS, your IP will always be in the rule set."
+  echo "It also means that any whitelist configuration changes will automatically be applied to your firewall rules."
+  echo "(Note: hostnames will be resolved every 5 mins and firewall updates will be made every 8 mins.)"
   echo ""
   read -p"Would you like to enable this automation? [Y/n]: " PROMPT
 
