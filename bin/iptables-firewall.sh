@@ -59,7 +59,7 @@ done
 # Allow established TCP connections
 $IPTABLES -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 
-# Default drop all UDP, default drop all TCP SYN
+# Default drop
 $IPTABLES -P INPUT DROP
 $IPTABLES -A INPUT -p udp -j DROP
 echo "INPUT chain default policy set to DROP ...."
