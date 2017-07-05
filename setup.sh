@@ -92,7 +92,7 @@ check_depends() {
         cp -ru ./bin /etc/iptables-firewall/ > /dev/null 2>&1
         cp -ru * /etc/iptables-firewall/ > /dev/null 2>&1
         ;;
-      "D" | "d") # Delete - removes all old files, cean install
+      "O" | "o") # Delete - removes all old files, cean install
         rm -rf /etc/iptables-firewall/ > /dev/null 2>&1
         mkdir /etc/iptables-firewall > /dev/null 2>&1
         cp -rfu . /etc/iptables-firewall/ > /dev/null 2>&1
