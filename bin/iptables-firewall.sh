@@ -12,11 +12,11 @@ else
   IPTABLES_SAVE=$(which iptables-save)
 fi
 
-WHITELIST=$(grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}" ./config/whitelist.conf > /dev/null 2>&1)
-HOSTLIST_IPS=$(grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}" ./config/hostname.ips > /dev/null 2>&1)
-TCP_ALLOWED=$(grep -oE "[0-9]{1,5}" ./config/tcp-ports.conf > /dev/null 2>&1)
-UDP_ALLOWED=$(grep -oE "[0-9]{1,5}" ./config/udp-ports.conf > /dev/null 2>&1)
-ICMP_ALLOWED=$(grep -oE "allow\_icmp\=[0-1]" ./config/icmp.conf | grep -oE "[0-1]" > /dev/null 2>&1)
+WHITELIST=$(grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}" config/whitelist.conf)
+HOSTLIST_IPS=$(grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}" config/hostname.ips)
+TCP_ALLOWED=$(grep -oE "[0-9]{1,5}" config/tcp-ports.conf)
+UDP_ALLOWED=$(grep -oE "[0-9]{1,5}" config/udp-ports.conf)
+ICMP_ALLOWED=$(grep -oE "allow\_icmp\=[0-1]" config/icmp.conf | grep -oE "[0-1]")
 
 $IPTABLES_SAVE > /etc/iptables-firewall/iptables-old.conf
 

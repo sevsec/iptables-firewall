@@ -3,16 +3,12 @@
 pushd /etc/iptables-firewall/config/
 
 if [ -e hostname.list ]; then
-  HOSTNAME_LIST=$(cat hostname.list)
+  rm hostname.ips
+  HOSTNAME_LIST=$(grep -oE ".*" hostname.list | grep -v "#")
 else
   echo "No host.list file found under /etc/iptables-firewall/config/"
   exit 1
 fi
-
-# For debugging - where did DDNS go wrong?
-#if [[ -e hosts-ip ]]; then
-#  mv hosts-ip hosts-ip-old
-#fi
 
 for HOSTNAME in $HOSTNAME_LIST; do
   echo -ne "Host: $HOSTNAME, "

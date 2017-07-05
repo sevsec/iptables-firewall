@@ -20,20 +20,24 @@ write_msg() {
   MSG="$2"
 
   case $MODE in
-    0) echo "[INFO] $MSG"
+    0)echo "[INFO] $MSG"
+      echo "$(date +%s) i[INFO] $MSG" >> /tmp/iptables-firewall-installation.log
       ;;
-    1) echo "[WARN] $MSG"
+    1)echo "[WARN] $MSG"
+      echo "$(date +%s) [WARN] $MSG" >> /tmp/iptables-firewall-installation.log
       ;;
-    2) echo "[ERROR] $MSG"
+    2)echo "[ERROR] $MSG"
+      echo "$(date +%s) [ERROR] $MSG" >> /tmp/iptables-firewall-installation.log
       ;;
-    *) echo "[??] $MSG"
+    *)echo "[??] $MSG"
+      echo "$(date +%s) [??] $MSG" >> /tmp/iptables-firewall-installation.log
       ;;
   esac
 }
 
 install_depends() {
   if [[ $(which yum > /dev/null 2>&1; echo $?) -eq 0 ]]; then
-    echo "Red Hat-based distro detected, updating and installing using yum ..."
+    echo "Red Hat-based distro detected, updating and installing using yum (this may take several minutes) ..."
     yum update > /dev/null 2>&1
     yum install -y $DEPENDS > /dev/null 2>&1
     if [[ "$?" -eq 0 ]]; then
@@ -43,7 +47,7 @@ install_depends() {
       exit 1
     fi
   elif [[ $(which apt > /dev/null 2>&1; echo $?) -eq 0 ]]; then
-    echo "Debian-based distro detected, updating and installing using apt ..."
+    echo "Debian-based distro detected, updating and installing using apt (this may take several minutes) ..."
     apt update > /dev/null 2>&1
     apt install -y $DEPENDS > /dev/null 2>&1
     if [[ "$?" -eq 0 ]]; then
@@ -53,7 +57,7 @@ install_depends() {
       exit 1
     fi
   elif [[ $(which pacman > /dev/null; echo $?) -eq 0 ]]; then
-    echo "Arch-based distro detected, updating and installing using pacman ..."
+    echo "Arch-based distro detected, updating and installing using pacman (this may take several minutes)..."
     pacman -Su > /dev/null 2>&1
     pacman install -y $DEPENDS > /dev/null 2>&1
     if [[ "$?" -eq 0 ]]; then
@@ -62,7 +66,6 @@ install_depends() {
       echo "Issue installing dependencies, exiting."
       exit 1
     fi
-
   else
     echo "Unable to determine package manager!"
     echo "(Are you doing something naughty, like using Gentoo? (Support coming soon)."
@@ -129,7 +132,7 @@ simple_install() {
   echo "Please enter all IPs allowed to connect to this system, separated by comma, tab, or space (NOT EOL): "
   read RIP
   for IP in `grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}" <<< $RIP`; do
-    echo $IP >> /etc/iptables-firewall/config/whitelist.ips
+    echo $IP >> /etc/iptables-firewall/config/whitelist.conf
   done
 
   # Hostnames
