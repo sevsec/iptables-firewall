@@ -49,7 +49,7 @@ install_depends() {
   elif [[ $(which apt > /dev/null 2>&1; echo $?) -eq 0 ]]; then
     echo "Debian-based distro detected, updating and installing using apt (this may take several minutes) ..."
     apt update > /dev/null 2>&1
-    apt install -y $DEPENDS > /dev/null 2>&1
+    apt install -yq $DEPENDS
     if [[ "$?" -eq 0 ]]; then
       echo "Dependency installations successful."
     else
