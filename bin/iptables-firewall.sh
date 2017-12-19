@@ -26,7 +26,7 @@ $IPTABLES -X
 echo "Deleted all user-defined chains ..."
 $IPTABLES -Z
 echo "Counters cleared ..."
-IPTABLES -P INPUT DROP
+$IPTABLES -P INPUT DROP
 
 echo "Adding localhost ..."
 $IPTABLES -A INPUT -s 127.0.0.1 -j ACCEPT

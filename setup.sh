@@ -13,7 +13,8 @@ elif [[ $(whoami) != "root" ]]; then
   exit 1
 fi
 
-DEPENDS="iptables iptables-persistent host"
+DEBIAN_DEPENDS="iptables iptables-persistent host"
+RHEL_DEPENDS="iptables bind-utils"
 
 write_msg() {
   MODE="$1"
@@ -39,7 +40,7 @@ install_depends() {
   if [[ $(which yum > /dev/null 2>&1; echo $?) -eq 0 ]]; then
     echo "Red Hat-based distro detected, updating and installing using yum (this may take several minutes) ..."
     yum update > /dev/null 2>&1
-    yum install -y $DEPENDS > /dev/null 2>&1
+    yum install -y $RHEL_DEPENDS > /dev/null 2>&1
     if [[ "$?" -eq 0 ]]; then
       echo "Dependency installations successful."
     else
@@ -49,7 +50,7 @@ install_depends() {
   elif [[ $(which apt > /dev/null 2>&1; echo $?) -eq 0 ]]; then
     echo "Debian-based distro detected, updating and installing using apt (this may take several minutes) ..."
     apt update > /dev/null 2>&1
-    apt install -yq $DEPENDS
+    apt install -yq $DEBIAN_DEPENDS
     if [[ "$?" -eq 0 ]]; then
       echo "Dependency installations successful."
     else
@@ -57,6 +58,8 @@ install_depends() {
       exit 1
     fi
   elif [[ $(which pacman > /dev/null; echo $?) -eq 0 ]]; then
+    echo "Sorry, ARCH-depends not implemented yet."
+    exit 1
     echo "Arch-based distro detected, updating and installing using pacman (this may take several minutes)..."
     pacman -Su > /dev/null 2>&1
     pacman install -y $DEPENDS > /dev/null 2>&1
