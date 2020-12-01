@@ -4,7 +4,7 @@ Simple whitelist-based firewall that uses iptables for rule enforcement.
 
 
 # Story, background
-I wrote some autoation for all the Virtual Private Servers I owned a few years back. Services like Digital Ocean, Cloud at Cost, SSD Virt, Lightsail, etc do not typically include any sort of mechanism to protect your VPS, leaving them open to the world unless you take the time to configure something on your own. This means that your VPS is open to the world, being hammered on within 1 second of going live on the public internet. Aside from the security risk, it's annoying to have people knocking on your door constantly, so I decided to setup an iptables-based firewall on my boxes. I went with iptables as it is typically installed by default on most distros, so creating automation around iptables to prevent my VPS from being hammered was fairly trivial.
+I wrote some automation for all the Virtual Private Servers I ran a few years back. Services like Digital Ocean, Cloud at Cost, SSD Virt, Lightsail, etc do not typically include any sort of firewall to protect your VPS, leaving them open to the world unless you take the time to configure something on your own. This means that your VPS will be hammered on SSH, telnet, HTTP, etc within 1 second of going live on the Internet. Aside from the security risk, it's annoying to have people knocking on your door constantly, so I decided to write an iptables-based firewall for VPS. I went with iptables as it is typically installed by default on most distros, so creating automation around iptables to prevent my VPS from being hammered was fairly trivial.
 
 Since I've had this for years, and wanted to start contributing something to the internet, I've chosen this as my first project to push to github.
 
