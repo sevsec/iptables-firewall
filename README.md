@@ -18,7 +18,7 @@ This firewall is whitelist-based, as it was much easier for me to specify which 
 
 
 # Installation:
-1. Run 'git clone https://github.com/sre3219/iptables-firewall'
+1. Run 'git clone https://github.com/sevsec/iptables-firewall'
 2. Enter the repo using 'cd iptables-firewall'
 3. Run the included setup.sh script using sudo: "sudo ./setup.sh"
 4. The default install mode is simple, which will prompt you for all the necessary configuration information.
